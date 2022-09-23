@@ -17,6 +17,7 @@ import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import InboxIcon from "@mui/icons-material/MoveToInbox";
 import MailIcon from "@mui/icons-material/Mail";
+import { NavLink } from "react-router-dom";
 
 const drawerWidth = 240;
 
@@ -69,6 +70,18 @@ const DrawerHeader = styled("div")(({ theme }) => ({
   justifyContent: "flex-end",
 }));
 
+const MyNavLink = React.forwardRef<any, any>((props, ref) => (
+  <NavLink
+    ref={ref}
+    to={props.to}
+    className={({ isActive }) =>
+      `${props.className} ${isActive ? props.activeClassName : ""}`
+    }
+  >
+    {props.children}
+  </NavLink>
+));
+
 type MenuProp = {
   open: boolean;
   onDrawerClose: () => void; //prop funciton
@@ -107,14 +120,40 @@ export default function Menu({ open, onDrawerClose }: MenuProp) {
       </DrawerHeader>
       <Divider />
       <List>
-        {["Inbox", "Starred", "Send email", "Drafts"].map((text, index) => (
+        {/* {["Inbox", "Starred", "Send email", "Drafts"].map((text, index) => (
           <ListItem button key={text}>
             <ListItemIcon>
               {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
             </ListItemIcon>
             <ListItemText primary={text} />
           </ListItem>
-        ))}
+        ))} */}
+
+        <ListItem
+          button
+          to="/stock"
+          component={MyNavLink}
+          activeClassName="Mui-selected"
+          exact
+        >
+          <ListItemIcon>
+            <InboxIcon />
+          </ListItemIcon>
+          <ListItemText primary="Stock" />
+        </ListItem>
+
+        <ListItem
+          button
+          to="/report"
+          component={MyNavLink}
+          activeClassName="Mui-selected"
+          exact
+        >
+          <ListItemIcon>
+            <InboxIcon />
+          </ListItemIcon>
+          <ListItemText primary="Stock" />
+        </ListItem>
       </List>
       <Divider />
       <List>
