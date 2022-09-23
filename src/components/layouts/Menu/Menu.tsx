@@ -17,7 +17,12 @@ import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import InboxIcon from "@mui/icons-material/MoveToInbox";
 import MailIcon from "@mui/icons-material/Mail";
+import Layers from "@mui/icons-material/Layers";
+import BarChart from "@mui/icons-material/BarChart";
+import Person from "@mui/icons-material/Person";
+
 import { NavLink } from "react-router-dom";
+import { Stack } from "@mui/material";
 
 const drawerWidth = 240;
 
@@ -70,21 +75,9 @@ const DrawerHeader = styled("div")(({ theme }) => ({
   justifyContent: "flex-end",
 }));
 
-const MyNavLink = React.forwardRef<any, any>((props, ref) => (
-  <NavLink
-    ref={ref}
-    to={props.to}
-    className={({ isActive }) =>
-      `${props.className} ${isActive ? props.activeClassName : ""}`
-    }
-  >
-    {props.children}
-  </NavLink>
-));
-
 type MenuProp = {
   open: boolean;
-  onDrawerClose: () => void; //prop funciton
+  onDrawerClose: () => void;
 };
 
 export default function Menu({ open, onDrawerClose }: MenuProp) {
@@ -94,6 +87,18 @@ export default function Menu({ open, onDrawerClose }: MenuProp) {
     // setOpen(false);
     onDrawerClose();
   };
+
+  const MyNavLink = React.forwardRef<any, any>((props, ref) => (
+    <NavLink
+      ref={ref}
+      to={props.to}
+      className={({ isActive }) =>
+        `${props.className} ${isActive ? props.activeClassName : ""}`
+      }
+    >
+      {props.children}
+    </NavLink>
+  ));
 
   return (
     <Drawer
@@ -110,25 +115,23 @@ export default function Menu({ open, onDrawerClose }: MenuProp) {
       open={open}
     >
       <DrawerHeader>
-        <IconButton onClick={handleDrawerClose}>
-          {theme.direction === "ltr" ? (
-            <ChevronLeftIcon />
-          ) : (
-            <ChevronRightIcon />
-          )}
-        </IconButton>
+        <Stack direction="row" alignItems="center">
+          <img
+            src={`${process.env.PUBLIC_URL}/images/cm_logo.png`}
+            style={{ height: 30 }}
+          />
+          <IconButton onClick={handleDrawerClose}>
+            {theme.direction === "ltr" ? (
+              <ChevronLeftIcon />
+            ) : (
+              <ChevronRightIcon />
+            )}
+          </IconButton>
+        </Stack>
       </DrawerHeader>
       <Divider />
       <List>
-        {/* {["Inbox", "Starred", "Send email", "Drafts"].map((text, index) => (
-          <ListItem button key={text}>
-            <ListItemIcon>
-              {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-            </ListItemIcon>
-            <ListItemText primary={text} />
-          </ListItem>
-        ))} */}
-
+        {/* Stock */}
         <ListItem
           button
           to="/stock"
@@ -137,11 +140,12 @@ export default function Menu({ open, onDrawerClose }: MenuProp) {
           exact
         >
           <ListItemIcon>
-            <InboxIcon />
+            <Layers />
           </ListItemIcon>
           <ListItemText primary="Stock" />
         </ListItem>
 
+        {/* Report */}
         <ListItem
           button
           to="/report"
@@ -150,9 +154,23 @@ export default function Menu({ open, onDrawerClose }: MenuProp) {
           exact
         >
           <ListItemIcon>
-            <InboxIcon />
+            <BarChart />
           </ListItemIcon>
-          <ListItemText primary="Stock" />
+          <ListItemText primary="Report" />
+        </ListItem>
+
+        {/*About us */}
+        <ListItem
+          button
+          to="/aboutus"
+          component={MyNavLink}
+          activeClassName="Mui-selected"
+          exact
+        >
+          <ListItemIcon>
+            <Person />
+          </ListItemIcon>
+          <ListItemText primary="AboutUs" />
         </ListItem>
       </List>
       <Divider />
