@@ -1,37 +1,65 @@
 import React, { ReactElement } from "react";
 import { useState } from "react";
-import { Formik } from "formik";
-interface Props {}
+import { Formik, FormikProps } from "formik";
+import { useNavigate } from "react-router-dom";
 
-export default function RegisterPage({}: Props): ReactElement {
-  const showForm = () => {};
-  const [user, setUser] = useState({ username: "", password: "" });
+type RegisterPageProps = {
+  //
+};
 
-  return (
-    <>
-      {/* <Formik initialValues={}> 
+const RegisterPage: React.FC<any> = () => {
+  const navigate = useNavigate();
 
-      </Formik> */}
-      <form
-        onSubmit={(e: React.FormEvent<Element>) => {
-          e.preventDefault();
-        }}
-      >
-        username:{" "}
+  const showForm = ({
+    handleSubmit,
+    handleChange,
+    isSubmitting,
+    values,
+  }: FormikProps<any>) => {
+    return (
+      <form onSubmit={handleSubmit}>
+        <label>Username: </label>
         <input
           type="text"
           name="username"
-          onChange={(e) => setUser({ ...user, username: e.target.value })}
+          id="username"
+          onChange={handleChange}
+          value={values.username}
         />
-        password{" "}
+        <br />
+        <label>Password: </label>
         <input
-          type="password"
+          type="text"
           name="password"
-          onChange={(e) => setUser({ ...user, password: e.target.value })}
+          id="password"
+          onChange={handleChange}
+          value={values.password}
         />
-        <span>Debug: {JSON.stringify(user)}</span>
-        <button type="submit">submit</button>
+        <br />
+
+        <button type="submit" disabled={isSubmitting}>
+          Submit
+        </button>
+        <button onClick={() => navigate(-1)}>Back</button>
       </form>
+    );
+  };
+
+  return (
+    <>
+      <Formik
+        onSubmit={(values, { setSubmitting }) => {
+          alert(JSON.stringify(values));
+
+          setTimeout(() => {
+            setSubmitting(false);
+          }, 2000);
+        }}
+        initialValues={{ username: "lek", password: "xxxx" }}
+      >
+        {(props) => showForm(props)}
+      </Formik>
     </>
   );
-}
+};
+export default RegisterPage;
