@@ -13,6 +13,8 @@ import {
   Typography,
 } from "@mui/material";
 import { User } from "../../../types/user.type";
+import { httpClient } from "./../../../utils/httpclient";
+import { server } from "../../../Constants";
 
 type RegisterPageProps = {
   //
@@ -128,8 +130,13 @@ const RegisterPage: React.FC<any> = () => {
               Register
             </Typography>
             <Formik
-              onSubmit={(values, { setSubmitting }) => {
-                alert(JSON.stringify(values));
+              onSubmit={async (values, { setSubmitting }) => {
+                const result = await httpClient.post(
+                  server.REGISTER_URL,
+                  values
+                );
+
+                alert(JSON.stringify(result.data));
 
                 setTimeout(() => {
                   setSubmitting(false);
