@@ -90,8 +90,8 @@ export default function App() {
   return (
     <Box sx={{ display: "flex" }}>
       <CssBaseline />
-      <Header open={open} onDrawerOpen={handleDrawerOpen} />
-      <Menu open={open} onDrawerClose={handleDrawerClose} />
+      {false && <Header open={open} onDrawerOpen={handleDrawerOpen} />}
+      {false && <Menu open={open} onDrawerClose={handleDrawerClose} />}
       <Main open={open}>
         <DrawerHeader />
         <Routes>
