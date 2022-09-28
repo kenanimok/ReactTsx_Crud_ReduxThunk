@@ -29,7 +29,7 @@ import { LoginResult } from "../types/authen.type";
         // begin connecting...
         dispatch(setLoginFetchingToState());
         // connect
-        const result = await httpClient.post<LoginResult>(server.LOGIN_URL, user);
+        const result = await httpClient.post<LoginResult> (server.LOGIN_URL, user);
         if (result.data.result === OK) {
           dispatch(setLoginSuccessToState(result.data));
           navigate("/login");
