@@ -3,6 +3,7 @@ import {
     LOGIN_FAILED,
     LOGIN_FETCHING,
     LOGIN_SUCCESS,
+    LOGOUT,
     server,
   } from "../Constants";
   
@@ -29,6 +30,8 @@ export default (
       return { ...state, isFetching: false, isError: false, result: payload };
     case LOGIN_FAILED:
       return { ...state, isFetching: false, isError: true, result: null };
+    case LOGOUT:
+        return initialState;
     default:
       return state;
 

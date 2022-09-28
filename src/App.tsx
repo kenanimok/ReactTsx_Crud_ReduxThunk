@@ -32,10 +32,11 @@ import StockCreatePage from "./components/pages/StockCreatePage";
 import StockEditPage from "./components/pages/StockEditPage";
 import ReportPage from "./components/pages/ReportPage";
 import { purple, blueGrey } from "@mui/material/colors";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { RootReducers } from "./reducers";
 import { stat } from "fs";
-
+import * as loginAction from "./actions/login.action";
+import { useEffect } from "react";
 const drawerWidth = 240;
 
 const Main = styled("main", { shouldForwardProp: (prop) => prop !== "open" })<{
@@ -119,7 +120,8 @@ const DrawerHeader = styled("div")(({ theme }) => ({
 
 export default function App() {
   const [open, setOpen] = React.useState(true);
-  const loginReducer = useSelector((state:RootReducers)=>state.loginReducer)
+  const loginReducer = useSelector((state: RootReducers) => state.loginReducer);
+  const dispath = useDispatch();
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -129,12 +131,20 @@ export default function App() {
     setOpen(false);
   };
 
+  useEffect(() => {
+    dispath(loginAction.restoreLogin());
+  }, []);
+
   return (
     <ThemeProvider theme={theme}>
       <Box sx={{ display: "flex" }}>
         <CssBaseline />
-        {loginReducer.result&&<Header open={open} onDrawerOpen={handleDrawerOpen} />}
-        {loginReducer.result && <Menu open={open} onDrawerClose={handleDrawerClose} />}
+        {loginReducer.result && (
+          <Header open={open} onDrawerOpen={handleDrawerOpen} />
+        )}
+        {loginReducer.result && (
+          <Menu open={open} onDrawerClose={handleDrawerClose} />
+        )}
         <Main open={open}>
           <DrawerHeader />
           <Routes>
