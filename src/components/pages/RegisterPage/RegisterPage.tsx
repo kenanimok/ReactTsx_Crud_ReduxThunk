@@ -2,6 +2,7 @@ import * as React from "react";
 import { useNavigate } from "react-router-dom";
 import { Formik, FormikProps } from "formik";
 import {
+  Alert,
   Box,
   Button,
   Card,
@@ -104,6 +105,10 @@ const RegisterPage: React.FC<any> = () => {
         />
         <br />
 
+        {registerReducer.isError && (
+          <Alert severity="error">Register failed</Alert>
+        )}
+
         <Stack direction="row" spacing={2} sx={classes.buttons}>
           <Button
             onClick={() => navigate("/login")}
@@ -118,7 +123,8 @@ const RegisterPage: React.FC<any> = () => {
             fullWidth
             variant="contained"
             color="primary"
-            disabled={isSubmitting}
+            // disabled={isSubmitting}
+            disabled={registerReducer.isFetching}
           >
             Create
           </Button>
@@ -139,7 +145,7 @@ const RegisterPage: React.FC<any> = () => {
             </Typography>
             <Formik
               onSubmit={async (values, { setSubmitting }) => {
-                dispatch(registerActions.register(values));
+                dispatch(registerActions.register(values, navigate));
               }}
               initialValues={initialValues}
             >
