@@ -28,15 +28,13 @@ import { Link, Navigate, Route, Routes } from "react-router-dom";
 import LoginPage from "./components/pages/LoginPage";
 import RegisterPage from "./components/pages/RegisterPage";
 import StockPage from "./components/pages/StockPage";
-import StockCreatePage from "./components/pages/StockCreatePage";
-import StockEditPage from "./components/pages/StockEditPage";
-import ReportPage from "./components/pages/ReportPage";
 import { purple, blueGrey } from "@mui/material/colors";
 import { useDispatch, useSelector } from "react-redux";
 import { RootReducers } from "./reducers";
-import { stat } from "fs";
-import * as loginAction from "./actions/login.action";
-import { useEffect } from "react";
+import * as loginActions from "./actions/login.action";
+import PublicRoutes from "./router/public.routes";
+import ProtectedRoutes from "./router/protected.routes";
+
 const drawerWidth = 240;
 
 const Main = styled("main", { shouldForwardProp: (prop) => prop !== "open" })<{
@@ -121,7 +119,7 @@ const DrawerHeader = styled("div")(({ theme }) => ({
 export default function App() {
   const [open, setOpen] = React.useState(true);
   const loginReducer = useSelector((state: RootReducers) => state.loginReducer);
-  const dispath = useDispatch();
+  const dispatch = useDispatch();
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -131,8 +129,8 @@ export default function App() {
     setOpen(false);
   };
 
-  useEffect(() => {
-    dispath(loginAction.restoreLogin());
+  React.useEffect(() => {
+    dispatch(loginActions.restoreLogin());
   }, []);
 
   return (
@@ -148,11 +146,22 @@ export default function App() {
         <Main open={open}>
           <DrawerHeader />
           <Routes>
-            <Route path="/login" element={<LoginPage />} />
-            <Route path="/register" element={<RegisterPage />} />
-            <Route path="/stock" element={<StockPage />} />
-            <Route path="/" element={<Navigate to="/login" />} />
-            <Route path="*" element={<NotFound />} />
+            {/* Public routes */}
+            <Route path="/" element={<PublicRoutes />}>
+              <Route path="/login" element={<LoginPage />} />
+              <Route path="/register" element={<RegisterPage />} />
+            </Route>
+
+            {/* Protected routes */}
+            <Route path="/" element={<ProtectedRoutes />}>
+              <Route path="/stock" element={<StockPage />} />
+              {/* <Route path="/stock/create" element={<StockCreatePage />} />
+              <Route path="/stock/edit/:id" element={<StockEditPage />} />
+              <Route path="/report" element={<ReportPage />} />
+              <Route path="/aboutus" element={<AboutUs />} /> */}
+              <Route path="/" element={<Navigate to="/login" />} />
+              <Route path="*" element={<NotFound />} />
+            </Route>
           </Routes>
         </Main>
       </Box>
