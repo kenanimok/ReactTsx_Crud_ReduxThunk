@@ -6,6 +6,7 @@ import {
     LOGIN_SUCCESS,
     server,
   } from "../Constants";
+import { LoginResult } from "../types/authen.type";
   import { User } from "../types/user.type";
   import { httpClient } from "../utils/httpclient";
   
@@ -28,7 +29,7 @@ import {
         // begin connecting...
         dispatch(setLoginFetchingToState());
         // connect
-        const result = await httpClient.post(server.LOGIN_URL, user);
+        const result = await httpClient.post<LoginResult>(server.LOGIN_URL, user);
         if (result.data.result === OK) {
           dispatch(setLoginSuccessToState(result.data));
           navigate("/login");
