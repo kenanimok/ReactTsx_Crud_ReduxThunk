@@ -1,8 +1,8 @@
 import { combineReducers } from "redux";
 import registerReducer, { RegisterState } from "./register.reducer";
-export default combineReducers({registerReducer})
 
+export default combineReducers({ registerReducer });
 
-export interface RootReducer{
-    registerReducer:RegisterState
+export interface RootReducers {
+  registerReducer: RegisterState;
 }

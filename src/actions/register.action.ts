@@ -1,39 +1,41 @@
 import {
-    REGISTER_FAILED,
-    REGISTER_FETCHING,
-    REGISTER_SUCCESS,
-    server,
-  } from "../Constants";
-  import { User } from "../types/user.type";
-  import { httpClient } from "../utils/httpclient";
+  OK,
+  REGISTER_FAILED,
+  REGISTER_FETCHING,
+  REGISTER_SUCCESS,
+  server,
+} from "../Constants";
+import { User } from "../types/user.type";
+import { httpClient } from "../utils/httpclient";
+
 export const setRegisterFetchingToState = () => ({
   type: REGISTER_FETCHING,
-})
+});
 
 export const setRegisterSuccessToState = (payload: any) => ({
-    type: REGISTER_SUCCESS,
-    payload,
-  });
+  type: REGISTER_SUCCESS,
+  payload,
+});
 
+export const setRegisterFailedToState = () => ({
+  type: REGISTER_FAILED,
+});
 
-  export const setRegisterFailedToState = () => ({
-    type: REGISTER_FAILED,
-  });
-
-  export const register = (user: User) => {
-    return async (dispatch: any) => {
-      try {
-        // begin connecting...
-        dispatch(setRegisterFetchingToState);
-        // connect
-        const result = await httpClient.post(server.REGISTER_URL, user);
+export const register = (user: User) => {
+  return async (dispatch: any) => {
+    try {
+      // begin connecting...
+      dispatch(setRegisterFetchingToState());
+      // connect
+      const result = await httpClient.post(server.REGISTER_URL, user);
+      if (result.data.result === OK) {
         dispatch(setRegisterSuccessToState(result.data));
-      } catch (error) {
-        // error
+      } else {
         dispatch(setRegisterFailedToState());
       }
-    };
-  }
-  
-  
-  // ไม่สามารถ ใข้  aynsc  await ในตรงนีได้ ต้อง เปน  ซิงโคนัสเท่านั้นโดยใช้  dispath
+    } catch (error) {
+      // error
+      dispatch(setRegisterFailedToState());
+    }
+  };
+};

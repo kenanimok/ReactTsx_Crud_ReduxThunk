@@ -1,5 +1,10 @@
 import * as React from "react";
-import { styled, useTheme } from "@mui/material/styles";
+import {
+  ThemeProvider,
+  createTheme,
+  styled,
+  useTheme,
+} from "@mui/material/styles";
 import Box from "@mui/material/Box";
 import Drawer from "@mui/material/Drawer";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -23,6 +28,10 @@ import { Link, Navigate, Route, Routes } from "react-router-dom";
 import LoginPage from "./components/pages/LoginPage";
 import RegisterPage from "./components/pages/RegisterPage";
 import StockPage from "./components/pages/StockPage";
+import StockCreatePage from "./components/pages/StockCreatePage";
+import StockEditPage from "./components/pages/StockEditPage";
+import ReportPage from "./components/pages/ReportPage";
+import { purple, blueGrey } from "@mui/material/colors";
 
 const drawerWidth = 240;
 
@@ -44,6 +53,36 @@ const Main = styled("main", { shouldForwardProp: (prop) => prop !== "open" })<{
     marginLeft: 0,
   }),
 }));
+
+const theme = createTheme({
+  components: {
+    MuiDrawer: {
+      styleOverrides: {
+        paper: {
+          backgroundImage:
+            "url(" +
+            `${process.env.PUBLIC_URL}/images/background_menu.jpg` +
+            ")",
+          width: drawerWidth,
+        },
+      },
+    },
+  },
+  typography: {
+    fontFamily: "Fredoka",
+    fontWeightLight: 300,
+    fontWeightRegular: 400,
+    fontWeightMedium: 500,
+    fontWeightBold: 600,
+  },
+  spacing: 8,
+  palette: {
+    primary: blueGrey,
+    background: {
+      default: "#CFD2D6",
+    },
+  },
+});
 
 interface AppBarProps extends MuiAppBarProps {
   open?: boolean;
@@ -76,7 +115,6 @@ const DrawerHeader = styled("div")(({ theme }) => ({
 }));
 
 export default function App() {
-  const theme = useTheme();
   const [open, setOpen] = React.useState(true);
 
   const handleDrawerOpen = () => {
@@ -88,21 +126,23 @@ export default function App() {
   };
 
   return (
-    <Box sx={{ display: "flex" }}>
-      <CssBaseline />
-      {false && <Header open={open} onDrawerOpen={handleDrawerOpen} />}
-      {false && <Menu open={open} onDrawerClose={handleDrawerClose} />}
-      <Main open={open}>
-        <DrawerHeader />
-        <Routes>
-          <Route path="/login" element={<LoginPage />} />
-          <Route path="/register" element={<RegisterPage />} />
-          <Route path="/stock" element={<StockPage />} />
-          <Route path="/" element={<Navigate to="/login" />} />
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </Main>
-    </Box>
+    <ThemeProvider theme={theme}>
+      <Box sx={{ display: "flex" }}>
+        <CssBaseline />
+        {false && <Header open={open} onDrawerOpen={handleDrawerOpen} />}
+        {false && <Menu open={open} onDrawerClose={handleDrawerClose} />}
+        <Main open={open}>
+          <DrawerHeader />
+          <Routes>
+            <Route path="/login" element={<LoginPage />} />
+            <Route path="/register" element={<RegisterPage />} />
+            <Route path="/stock" element={<StockPage />} />
+            <Route path="/" element={<Navigate to="/login" />} />
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </Main>
+      </Box>
+    </ThemeProvider>
   );
 }
 

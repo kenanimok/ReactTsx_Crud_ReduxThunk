@@ -15,52 +15,60 @@ import {
 import { User } from "../../../types/user.type";
 import { httpClient } from "./../../../utils/httpclient";
 import { server } from "../../../Constants";
-
+import * as registerActions from "../../../actions/register.action";
+import { useDispatch, useSelector } from "react-redux";
+import { RootReducers } from "../../../reducers";
 type RegisterPageProps = {
   //
 };
 
 const RegisterPage: React.FC<any> = () => {
+  const registerReducer = useSelector(
+    (state: RootReducers) => state.registerReducer
+  );
+
+  const dispatch = useDispatch();
+
   const navigate = useNavigate();
   const classes: SxProps<Theme> | any = {
     root: { display: "flex", justifyContent: "center" },
     buttons: { marginTop: 2 },
   };
 
-  // const showFormV1 = ({
-  //   handleSubmit,
-  //   handleChange,
-  //   isSubmitting,
-  //   values,
-  // }: FormikProps<any>) => {
-  //   return (
-  //     <form onSubmit={handleSubmit}>
-  //       <label>Username: </label>
-  //       <input
-  //         type="text"
-  //         name="username"
-  //         id="username"
-  //         onChange={handleChange}
-  //         value={values.username}
-  //       />
-  //       <br />
-  //       <label>Password: </label>
-  //       <input
-  //         type="text"
-  //         name="password"
-  //         id="password"
-  //         onChange={handleChange}
-  //         value={values.password}
-  //       />
-  //       <br />
+  const showFormV1 = ({
+    handleSubmit,
+    handleChange,
+    isSubmitting,
+    values,
+  }: FormikProps<any>) => {
+    return (
+      <form onSubmit={handleSubmit}>
+        <label>Username: </label>
+        <input
+          type="text"
+          name="username"
+          id="username"
+          onChange={handleChange}
+          value={values.username}
+        />
+        <br />
+        <label>Password: </label>
+        <input
+          type="text"
+          name="password"
+          id="password"
+          onChange={handleChange}
+          value={values.password}
+        />
+        <br />
 
-  //       <button type="submit" disabled={isSubmitting}>
-  //         Submit
-  //       </button>
-  //       <button onClick={() => navigate(-1)}>Back</button>
-  //     </form>
-  //   );
-  // };
+        <button type="submit" disabled={isSubmitting}>
+          Submit
+        </button>
+        <button onClick={() => navigate(-1)}>Back</button>
+      </form>
+    );
+  };
 
   const showFormV2 = ({
     handleSubmit,
@@ -131,16 +139,7 @@ const RegisterPage: React.FC<any> = () => {
             </Typography>
             <Formik
               onSubmit={async (values, { setSubmitting }) => {
-                const result = await httpClient.post(
-                  server.REGISTER_URL,
-                  values
-                );
-
-                alert(JSON.stringify(result.data));
-
-                setTimeout(() => {
-                  setSubmitting(false);
-                }, 2000);
+                dispatch(registerActions.register(values));
               }}
               initialValues={initialValues}
             >
