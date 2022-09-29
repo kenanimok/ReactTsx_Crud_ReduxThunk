@@ -202,7 +202,7 @@ export default function StockPage() {
         componentsProps={{
           toolbar: {
             onChange: (e: React.ChangeEvent<HTMLInputElement>) => {
-              console.log(e.target.value);
+              dispatch(stockActions.loadStockByKeyword(e.target.value));
             },
           },
         }}
