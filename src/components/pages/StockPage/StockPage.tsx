@@ -13,6 +13,8 @@ import * as stockActions from "../../../actions/stock.action";
 import { useDispatch, useSelector } from "react-redux";
 import { RootReducers } from "../../../reducers";
 import { useState } from "react";
+import { useDebounce, useDebounceCallback } from "@react-hook/debounce";
+
 import {
   Typography,
   Stack,
@@ -191,7 +193,13 @@ function QuickSearchToolbar(props: QuickSearchToolbarProps) {
 export default function StockPage() {
   const stockReducer = useSelector((state: RootReducers) => state.stockReducer);
   const dispatch = useAppDispatch();
-  const [keywordSearch, setkeywordSearch] = useState<string>("");
+  const [keywordSearch, setKeywordSearch] = useDebounce<string>("", 1000);
+  const [keywordSearchNoDelay, setKeywordSearchNoDelay] =
+    React.useState<string>("");
+
+  React.useEffect(() => {
+    dispatch(stockActions.loadStockByKeyword(keywordSearch));
+  }, [keywordSearch]);
 
   React.useEffect(() => {
     dispatch(stockActions.loadStock());
@@ -203,8 +211,14 @@ export default function StockPage() {
         components={{ Toolbar: QuickSearchToolbar }}
         componentsProps={{
           toolbar: {
+            value: keywordSearchNoDelay,
             onChange: (e: React.ChangeEvent<HTMLInputElement>) => {
-              dispatch(stockActions.loadStockByKeyword(e.target.value));
+              setKeywordSearch(e.target.value);
+              setKeywordSearchNoDelay(e.target.value);
+            },
+            clearSearch: () => {
+              setKeywordSearch("");
+              setKeywordSearchNoDelay("");
             },
           },
         }}
