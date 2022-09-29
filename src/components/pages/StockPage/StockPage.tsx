@@ -12,6 +12,7 @@ import { imageUrl } from "../../../Constants";
 import * as stockActions from "../../../actions/stock.action";
 import { useDispatch, useSelector } from "react-redux";
 import { RootReducers } from "../../../reducers";
+import { useState } from "react";
 import {
   Typography,
   Stack,
@@ -190,6 +191,7 @@ function QuickSearchToolbar(props: QuickSearchToolbarProps) {
 export default function StockPage() {
   const stockReducer = useSelector((state: RootReducers) => state.stockReducer);
   const dispatch = useAppDispatch();
+  const [keywordSearch, setkeywordSearch] = useState<string>("");
 
   React.useEffect(() => {
     dispatch(stockActions.loadStock());
