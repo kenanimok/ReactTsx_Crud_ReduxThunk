@@ -18,6 +18,7 @@ import {
   };
   
   export default (state = initialState, { type, payload }: any) => {
+    console.log('payload___stock', payload)
     switch (type) {
       case STOCK_FETCHING:
         return { ...state, result: [], isFetching: true, isError: false };

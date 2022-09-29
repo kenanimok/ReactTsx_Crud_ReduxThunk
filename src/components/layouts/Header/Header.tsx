@@ -110,7 +110,7 @@ export default function Header({ open, onDrawerOpen }: HeaderProp) {
         <Box sx={{ flexGrow: 1 }} />
 
         <Typography variant="h6" noWrap component="div" fontWeight="300">
-          Updated 2022
+          Crud mui
         </Typography>
 
         <Box sx={{ display: { xs: "none", md: "flex" } }}>
