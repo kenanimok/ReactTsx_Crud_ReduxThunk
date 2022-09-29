@@ -47,7 +47,6 @@ export const login = (user: User, navigate: any) => {
         dispatch(setLoginFailedToState());
       }
     } catch (error) {
-      // error
       dispatch(setLoginFailedToState());
     }
   };
