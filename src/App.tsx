@@ -34,6 +34,7 @@ import { RootReducers } from "./reducers";
 import * as loginActions from "./actions/login.action";
 import PublicRoutes from "./router/public.routes";
 import ProtectedRoutes from "./router/protected.routes";
+import { useAppDispatch } from ".";
 
 const drawerWidth = 240;
 
@@ -119,7 +120,7 @@ const DrawerHeader = styled("div")(({ theme }) => ({
 export default function App() {
   const [open, setOpen] = React.useState(true);
   const loginReducer = useSelector((state: RootReducers) => state.loginReducer);
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   const handleDrawerOpen = () => {
     setOpen(true);

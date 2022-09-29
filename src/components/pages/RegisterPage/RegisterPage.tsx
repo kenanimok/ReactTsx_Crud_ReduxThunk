@@ -19,6 +19,8 @@ import { server } from "../../../Constants";
 import * as registerActions from "../../../actions/register.action";
 import { useDispatch, useSelector } from "react-redux";
 import { RootReducers } from "../../../reducers";
+import { useAppDispatch } from "../../..";
+
 type RegisterPageProps = {
   //
 };
@@ -28,7 +30,7 @@ const RegisterPage: React.FC<any> = () => {
     (state: RootReducers) => state.registerReducer
   );
 
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   const navigate = useNavigate();
   const classes: SxProps<Theme> | any = {

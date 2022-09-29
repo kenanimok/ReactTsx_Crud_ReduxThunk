@@ -23,6 +23,7 @@ import AccountCircle from "@mui/icons-material/AccountCircle";
 import { useNavigate } from "react-router-dom";
 import * as loginActions from "../../../actions/login.action";
 import { useDispatch } from "react-redux";
+import { useAppDispatch } from "../../..";
 const drawerWidth = 240;
 
 const Main = styled("main", { shouldForwardProp: (prop) => prop !== "open" })<{
@@ -82,7 +83,7 @@ type HeaderProp = {
 export default function Header({ open, onDrawerOpen }: HeaderProp) {
   const theme = useTheme();
   const navigate = useNavigate();
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   const handleDrawerOpen = () => {
     // setOpen(true);
@@ -102,10 +103,16 @@ export default function Header({ open, onDrawerOpen }: HeaderProp) {
           <MenuIcon />
         </IconButton>
         <Typography variant="h6" noWrap component="div">
-          CMStock Workshop with ReactJS - Typescript (TS)
+          Crud use Redux Type script
+          {process.env.REACT_APP_VERSION}
         </Typography>
 
         <Box sx={{ flexGrow: 1 }} />
+
+        <Typography variant="h6" noWrap component="div" fontWeight="300">
+          Updated 2022
+        </Typography>
+
         <Box sx={{ display: { xs: "none", md: "flex" } }}>
           <IconButton
             size="large"
@@ -142,3 +149,4 @@ export default function Header({ open, onDrawerOpen }: HeaderProp) {
     </AppBar>
   );
 }
+// Footer;
