@@ -23,6 +23,7 @@ import Person from "@mui/icons-material/Person";
 
 import { NavLink } from "react-router-dom";
 import { Stack } from "@mui/material";
+import { start } from "repl";
 
 const drawerWidth = 240;
 
@@ -115,11 +116,16 @@ export default function Menu({ open, onDrawerClose }: MenuProp) {
       open={open}
     >
       <DrawerHeader>
-        <Stack direction="row" alignItems="center">
-          {/* <img
-            src={`${process.env.PUBLIC_URL}/images/cm_logo.png`}
-            style={{ height: 30 }}
-          /> */}
+        <Stack direction="row" alignItems="left">
+          <img
+            src={`${process.env.PUBLIC_URL}/images/kfc.png`}
+            style={{
+              height: 50,
+              width: "100%",
+              display: "flex",
+              justifyContent: "start",
+            }}
+          />
           <IconButton onClick={handleDrawerClose}>
             {theme.direction === "ltr" ? (
               <ChevronLeftIcon />

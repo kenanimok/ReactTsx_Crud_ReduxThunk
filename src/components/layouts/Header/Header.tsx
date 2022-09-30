@@ -110,11 +110,11 @@ export default function Header({ open, onDrawerOpen }: HeaderProp) {
         <Box sx={{ flexGrow: 1 }} />
 
         <Typography variant="h6" noWrap component="div" fontWeight="300">
-          Crud mui
+          {/* Crud mui */}
         </Typography>
 
         <Box sx={{ display: { xs: "none", md: "flex" } }}>
-          <IconButton
+          {/* <IconButton
             size="large"
             aria-label="show 4 new mails"
             color="inherit"
@@ -122,7 +122,7 @@ export default function Header({ open, onDrawerOpen }: HeaderProp) {
             <Badge badgeContent={4} color="error">
               <MailIcon />
             </Badge>
-          </IconButton>
+          </IconButton> */}
           <IconButton
             size="large"
             aria-label="show 17 new notifications"
