@@ -4,9 +4,11 @@ import {
     STOCK_EDIT_FETCHING,
     STOCK_EDIT_SUCCESS,
   } from "../Constants";
+  import { Product } from "../types/product.type";
   
   export interface StockEditState {
-    result: any;
+    result: Product | null;
+    // add type result
     isFetching: boolean;
     isError: boolean;
   }

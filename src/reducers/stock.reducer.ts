@@ -4,9 +4,11 @@ import {
     STOCK_FETCHING,
     STOCK_SUCCESS,
   } from "../Constants";
+import { Product } from "../types/product.type";
   
   export interface StockState {
-    result: any[];
+    result: Product[];
+    //ยัด type
     isFetching: boolean;
     isError: boolean;
   }
@@ -18,7 +20,7 @@ import {
   };
   
   export default (state = initialState, { type, payload }: any) => {
-    console.log('payload___stock', payload)
+    // console.log('payload___stock', payload)
     switch (type) {
       case STOCK_FETCHING:
         return { ...state, result: [], isFetching: true, isError: false };
