@@ -34,6 +34,7 @@ import { RootReducers } from "./reducers";
 import * as loginActions from "./actions/login.action";
 import PublicRoutes from "./router/public.routes";
 import ProtectedRoutes from "./router/protected.routes";
+import StockCreatePage from "./components/pages/StockCreatePage";
 import { useAppDispatch } from ".";
 
 const drawerWidth = 240;
@@ -156,10 +157,7 @@ export default function App() {
             {/* Protected routes */}
             <Route path="/" element={<ProtectedRoutes />}>
               <Route path="/stock" element={<StockPage />} />
-              {/* <Route path="/stock/create" element={<StockCreatePage />} />
-              <Route path="/stock/edit/:id" element={<StockEditPage />} />
-              <Route path="/report" element={<ReportPage />} />
-              <Route path="/aboutus" element={<AboutUs />} /> */}
+              <Route path="/stock/create" element={<StockCreatePage />} />
               <Route path="/" element={<Navigate to="/login" />} />
               <Route path="*" element={<NotFound />} />
             </Route>
