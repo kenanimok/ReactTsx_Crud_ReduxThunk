@@ -58,7 +58,7 @@ const doGetProducts = async (dispatch: any) => {
 export const addProduct = (formData: FormData) => {
   return async (dispatch: any) => {
     await httpClient.post(server.PRODUCT_URL, formData);
-    history.back();
+    // history.back();
   };
 };
 
