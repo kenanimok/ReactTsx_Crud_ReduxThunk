@@ -7,12 +7,14 @@ import {
 } from "@mui/x-data-grid";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
-import { useAppDispatch } from "../../..";
 
 import { imageUrl } from "../../../Constants";
 import * as stockActions from "../../../actions/stock.action";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { RootReducers } from "../../../reducers";
+import { useState } from "react";
+import { useDebounce, useDebounceCallback } from "@react-hook/debounce";
+
 import {
   Typography,
   Stack,
@@ -20,18 +22,12 @@ import {
   Box,
   TextField,
   Fab,
-  Button,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogContentText,
-  DialogTitle,
 } from "@mui/material";
 import { NumericFormat } from "react-number-format";
 import Moment from "react-moment";
 import { Add, Clear, Search } from "@mui/icons-material";
 import { Link } from "react-router-dom";
-import { useDebounce, useDebounceCallback } from "@react-hook/debounce";
+import { useAppDispatch } from "../../..";
 
 const stockColumns: GridColDef[] = [
   {
@@ -194,7 +190,7 @@ function QuickSearchToolbar(props: QuickSearchToolbarProps) {
   );
 }
 
-export default function StockPage() {
+export default function Revert_stock() {
   const stockReducer = useSelector((state: RootReducers) => state.stockReducer);
   const dispatch = useAppDispatch();
   const [keywordSearch, setKeywordSearch] = useDebounce<string>("", 1000);
@@ -208,36 +204,6 @@ export default function StockPage() {
   React.useEffect(() => {
     dispatch(stockActions.loadStock());
   }, []);
-
-  const [open, setOpen] = React.useState(false);
-  const handleClose = () => setOpen(false);
-
-  const showExampleDlg = () => {
-    return (
-      <Dialog
-        open={open}
-        onClose={handleClose}
-        aria-labelledby="alert-dialog-title"
-        aria-describedby="alert-dialog-description"
-      >
-        <DialogTitle id="alert-dialog-title">
-          {"Use Google's location service?"}
-        </DialogTitle>
-        <DialogContent>
-          <DialogContentText id="alert-dialog-description">
-            Let Google help apps determine location. This means sending
-            anonymous location data to Google, even when no apps are running.
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleClose}>Disagree</Button>
-          <Button onClick={handleClose} autoFocus>
-            Agree
-          </Button>
-        </DialogActions>
-      </Dialog>
-    );
-  };
 
   return (
     <Box>
@@ -262,8 +228,6 @@ export default function StockPage() {
         pageSize={10}
         rowsPerPageOptions={[5]}
       />
-      <Button onClick={() => setOpen(true)}>Show Dlg</Button>
-      {showExampleDlg()}
     </Box>
   );
 }
