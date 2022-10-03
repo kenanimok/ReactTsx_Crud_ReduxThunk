@@ -1,3 +1,6 @@
+import * as React from "react";
+
+
 import {
   server,
   STOCK_CLEAR,
@@ -60,8 +63,8 @@ const doGetProducts = async (dispatch: any) => {
 export const addProduct = (formData: FormData) => {
   return async (dispatch: any) => {
     await httpClient.post(server.PRODUCT_URL, formData);
-    // history.back();
-  };
+    
+    };
 };
 
 export const deleteProduct = (id: string) => {

@@ -9,12 +9,30 @@ import {
 import { FormikProps, Form, Field, Formik } from "formik";
 import { TextField } from "formik-material-ui";
 import * as React from "react";
+// import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 import { Product } from "../../../types/product.type";
-type Props = {};
+import * as stockActions from "./../../../actions/stock.action";
+import { useAppDispatch } from "../../..";
+
+type StockCreatePageProps = {
+  //
+};
 
 const StockCreatePage: React.FC<any> = () => {
-  const showForm = ({ values, setFieldValue }: FormikProps<Product>) => {
+  const dispatch = useAppDispatch();
+
+  const showPreviewImage = (values: any) => {
+    if (values.file_obj) {
+      return <img src={values.file_obj} style={{ height: 100 }} />;
+    }
+  };
+
+  const showForm = ({
+    values,
+    setFieldValue,
+    isSubmitting,
+  }: FormikProps<Product>) => {
     return (
       <Form>
         <Card>
@@ -50,7 +68,7 @@ const StockCreatePage: React.FC<any> = () => {
               label="Stock"
             />
 
-            {/* <div style={{ margin: 16 }}>{showPreviewImage(values)}</div> */}
+            <div style={{ margin: 16 }}>{showPreviewImage(values)}</div>
 
             <div>
               <img
@@ -82,6 +100,7 @@ const StockCreatePage: React.FC<any> = () => {
           </CardContent>
           <CardActions>
             <Button
+              disabled={isSubmitting}
               fullWidth
               variant="contained"
               color="primary"
@@ -99,14 +118,35 @@ const StockCreatePage: React.FC<any> = () => {
     );
   };
 
+  const initialValues: Product = { name: "", stock: 0, price: 0 };
+
   return (
-    <>
-      <Box>
-        <Formik initialValues={{}} onSubmit={(value, {}) => {}}>
-          {(props: any) => showForm(props)}
-        </Formik>
-      </Box>
-    </>
+    <Box>
+      <Formik
+        validate={(values) => {
+          let errors: any = {};
+          if (!values.name) errors.name = "Enter name";
+          if (values.stock < 10)
+            errors.stock = "Min stock is not lower than 10";
+          if (values.price < 100)
+            errors.price = "Min price is not lower than 100";
+          return errors;
+        }}
+        initialValues={initialValues}
+        onSubmit={(values, { setSubmitting }) => {
+          // alert(JSON.stringify(values));
+          let formData = new FormData();
+          formData.append("name", values.name);
+          formData.append("price", String(values.price));
+          formData.append("stock", String(values.stock));
+          formData.append("image", values.file);
+          dispatch(stockActions.addProduct(formData));
+          setSubmitting(false);
+        }}
+      >
+        {(props: any) => showForm(props)}
+      </Formik>
+    </Box>
   );
 };
 
