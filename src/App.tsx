@@ -28,15 +28,16 @@ import { Link, Navigate, Route, Routes } from "react-router-dom";
 import LoginPage from "./components/pages/LoginPage";
 import RegisterPage from "./components/pages/RegisterPage";
 import StockPage from "./components/pages/StockPage";
-import { purple, blueGrey } from "@mui/material/colors";
+import StockCreatePage from "./components/pages/StockCreatePage";
+import StockEditPage from "./components/pages/StockEditPage";
+import ReportPage from "./components/pages/ReportPage";
+import { purple, blueGrey, blue } from "@mui/material/colors";
 import { useDispatch, useSelector } from "react-redux";
 import { RootReducers } from "./reducers";
 import * as loginActions from "./actions/login.action";
 import PublicRoutes from "./router/public.routes";
 import ProtectedRoutes from "./router/protected.routes";
-import StockCreatePage from "./components/pages/StockCreatePage";
 import { useAppDispatch } from ".";
-import StockEditPage from "./components/pages/StockEditPage";
 
 const drawerWidth = 240;
 
@@ -82,33 +83,12 @@ const theme = createTheme({
   },
   spacing: 8,
   palette: {
-    primary: blueGrey,
+    primary: process.env.REACT_APP_IS_PRODUCTION == "0" ? blue : blueGrey,
     background: {
       default: "#CFD2D6",
     },
   },
 });
-
-interface AppBarProps extends MuiAppBarProps {
-  open?: boolean;
-}
-
-const AppBar = styled(MuiAppBar, {
-  shouldForwardProp: (prop) => prop !== "open",
-})<AppBarProps>(({ theme, open }) => ({
-  transition: theme.transitions.create(["margin", "width"], {
-    easing: theme.transitions.easing.sharp,
-    duration: theme.transitions.duration.leavingScreen,
-  }),
-  ...(open && {
-    width: `calc(100% - ${drawerWidth}px)`,
-    marginLeft: `${drawerWidth}px`,
-    transition: theme.transitions.create(["margin", "width"], {
-      easing: theme.transitions.easing.easeOut,
-      duration: theme.transitions.duration.enteringScreen,
-    }),
-  }),
-}));
 
 const DrawerHeader = styled("div")(({ theme }) => ({
   display: "flex",
@@ -146,13 +126,22 @@ export default function App() {
         {loginReducer.result && (
           <Menu open={open} onDrawerClose={handleDrawerClose} />
         )}
-        <Main open={open}>
+        <Main
+          open={open}
+          sx={{
+            backgroundImage:
+              "url(" + `${process.env.PUBLIC_URL}/images/background.jpg` + ")",
+            height: "100vh",
+          }}
+        >
           <DrawerHeader />
           <Routes>
             {/* Public routes */}
             <Route path="/" element={<PublicRoutes />}>
               <Route path="/login" element={<LoginPage />} />
               <Route path="/register" element={<RegisterPage />} />
+              <Route path="/" element={<Navigate to="/login" />} />
+              <Route path="*" element={<NotFound />} />
             </Route>
 
             {/* Protected routes */}
@@ -160,9 +149,7 @@ export default function App() {
               <Route path="/stock" element={<StockPage />} />
               <Route path="/stock/create" element={<StockCreatePage />} />
               <Route path="/stock/edit/:id" element={<StockEditPage />} />
-              {/* <Route path="/stock/edit" element={<StockEditPage />} /> */}
-              <Route path="/" element={<Navigate to="/login" />} />
-              <Route path="*" element={<NotFound />} />
+              <Route path="/report" element={<ReportPage />} />
             </Route>
           </Routes>
         </Main>

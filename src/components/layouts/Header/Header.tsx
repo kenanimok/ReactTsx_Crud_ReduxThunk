@@ -103,18 +103,18 @@ export default function Header({ open, onDrawerOpen }: HeaderProp) {
           <MenuIcon />
         </IconButton>
         <Typography variant="h6" noWrap component="div">
-          Crud use Redux Type script
+          CMStock Workshop with ReactJS - Typescript (TS) V.
           {process.env.REACT_APP_VERSION}
         </Typography>
 
         <Box sx={{ flexGrow: 1 }} />
 
         <Typography variant="h6" noWrap component="div" fontWeight="300">
-          {/* Crud mui */}
+          Updated 2022
         </Typography>
 
         <Box sx={{ display: { xs: "none", md: "flex" } }}>
-          {/* <IconButton
+          <IconButton
             size="large"
             aria-label="show 4 new mails"
             color="inherit"
@@ -122,7 +122,7 @@ export default function Header({ open, onDrawerOpen }: HeaderProp) {
             <Badge badgeContent={4} color="error">
               <MailIcon />
             </Badge>
-          </IconButton> */}
+          </IconButton>
           <IconButton
             size="large"
             aria-label="show 17 new notifications"
@@ -149,4 +149,3 @@ export default function Header({ open, onDrawerOpen }: HeaderProp) {
     </AppBar>
   );
 }
-// Footer;
