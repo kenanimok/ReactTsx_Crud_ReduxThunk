@@ -7,11 +7,12 @@ import {
 } from "@mui/x-data-grid";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
-import { useAppDispatch } from "../../..";
 
 import { imageUrl } from "../../../Constants";
 import * as stockActions from "../../../actions/stock.action";
 import { useSelector } from "react-redux";
+import { useAppDispatch } from "../../..";
+
 import { RootReducers } from "../../../reducers";
 import {
   Typography,
@@ -32,101 +33,7 @@ import Moment from "react-moment";
 import { Add, Clear, Search } from "@mui/icons-material";
 import { Link } from "react-router-dom";
 import { useDebounce, useDebounceCallback } from "@react-hook/debounce";
-
-const stockColumns: GridColDef[] = [
-  {
-    headerName: "ID",
-    field: "id",
-    width: 50,
-  },
-  {
-    headerName: "IMG",
-    field: "image",
-    width: 80,
-    renderCell: ({ value }: GridRenderCellParams<string>) => (
-      <img
-        src={`${imageUrl}/images/${value}?dummy=${Math.random()}`}
-        style={{ width: 70, height: 70, borderRadius: "5%" }}
-      />
-    ),
-  },
-  {
-    headerName: "NAME",
-    field: "name",
-    width: 500,
-  },
-  {
-    headerName: "STOCK",
-    width: 120,
-    field: "stock",
-    renderCell: ({ value }: GridRenderCellParams<string>) => (
-      <Typography variant="body1">
-        <NumericFormat
-          value={value}
-          displayType={"text"}
-          thousandSeparator={true}
-          decimalScale={0}
-          fixedDecimalScale={true}
-        />
-      </Typography>
-    ),
-  },
-  {
-    headerName: "PRICE",
-    field: "price",
-    width: 120,
-    renderCell: ({ value }: GridRenderCellParams<string>) => (
-      <Typography variant="body1">
-        <NumericFormat
-          value={value}
-          displayType={"text"}
-          thousandSeparator={true}
-          decimalScale={2}
-          fixedDecimalScale={true}
-          prefix={"฿"}
-        />
-      </Typography>
-    ),
-  },
-  {
-    headerName: "TIME",
-    field: "createdAt",
-    width: 220,
-    renderCell: ({ value }: GridRenderCellParams<string>) => (
-      <Typography variant="body1">
-        <Moment format="DD/MM/YYYY HH:mm">{value}</Moment>
-      </Typography>
-    ),
-  },
-  {
-    headerName: "ACTION",
-    field: ".",
-    width: 120,
-    renderCell: ({ row }: GridRenderCellParams<string>) => (
-      <Stack direction="row">
-        <IconButton
-          aria-label="edit"
-          size="large"
-          onClick={() => {
-            // navigate("/stock/edit/" + row.product_id);
-          }}
-        >
-          <EditIcon fontSize="inherit" />
-        </IconButton>
-        <IconButton
-          aria-label="delete"
-          size="large"
-          onClick={() => {
-            // setSelectedProduct(row);
-            // setOpenDialog(true);
-          }}
-        >
-          <DeleteIcon fontSize="inherit" />
-        </IconButton>
-      </Stack>
-    ),
-  },
-];
+import { Product } from "../../../types/product.type";
 
 interface QuickSearchToolbarProps {
   clearSearch: () => void;
@@ -200,6 +107,10 @@ export default function StockPage() {
   const [keywordSearch, setKeywordSearch] = useDebounce<string>("", 1000);
   const [keywordSearchNoDelay, setKeywordSearchNoDelay] =
     React.useState<string>("");
+  const [selectedProduct, setSelectedProduct] = React.useState<Product | null>(
+    null
+  );
+  const [openDialog, setOpenDialog] = React.useState<boolean>(false);
 
   React.useEffect(() => {
     dispatch(stockActions.loadStockByKeyword(keywordSearch));
@@ -209,30 +120,140 @@ export default function StockPage() {
     dispatch(stockActions.loadStock());
   }, []);
 
-  const [open, setOpen] = React.useState(false);
-  const handleClose = () => setOpen(false);
+  const stockColumns: GridColDef[] = [
+    {
+      headerName: "ID",
+      field: "id",
+      width: 50,
+    },
+    {
+      headerName: "IMG",
+      field: "image",
+      width: 80,
+      renderCell: ({ value }: GridRenderCellParams<string>) => (
+        <img
+          src={`${imageUrl}/images/${value}?dummy=${Math.random()}`}
+          style={{ width: 70, height: 70, borderRadius: "5%" }}
+        />
+      ),
+    },
+    {
+      headerName: "NAME",
+      field: "name",
+      width: 500,
+    },
+    {
+      headerName: "STOCK",
+      width: 120,
+      field: "stock",
+      renderCell: ({ value }: GridRenderCellParams<string>) => (
+        <Typography variant="body1">
+          <NumericFormat
+            value={value}
+            displayType={"text"}
+            thousandSeparator={true}
+            decimalScale={0}
+            fixedDecimalScale={true}
+          />
+        </Typography>
+      ),
+    },
+    {
+      headerName: "PRICE",
+      field: "price",
+      width: 120,
+      renderCell: ({ value }: GridRenderCellParams<string>) => (
+        <Typography variant="body1">
+          <NumericFormat
+            value={value}
+            displayType={"text"}
+            thousandSeparator={true}
+            decimalScale={2}
+            fixedDecimalScale={true}
+            prefix={"฿"}
+          />
+        </Typography>
+      ),
+    },
+    {
+      headerName: "TIME",
+      field: "createdAt",
+      width: 220,
+      renderCell: ({ value }: GridRenderCellParams<string>) => (
+        <Typography variant="body1">
+          <Moment format="DD/MM/YYYY HH:mm">{value}</Moment>
+        </Typography>
+      ),
+    },
+    {
+      headerName: "ACTION",
+      field: ".",
+      width: 120,
+      renderCell: ({ row }: GridRenderCellParams<string>) => (
+        <Stack direction="row">
+          <IconButton
+            aria-label="edit"
+            size="large"
+            onClick={() => {
+              // navigate("/stock/edit/" + row.product_id);
+            }}
+          >
+            <EditIcon fontSize="inherit" />
+          </IconButton>
+          <IconButton
+            aria-label="delete"
+            size="large"
+            onClick={() => {
+              setSelectedProduct(row);
+              setOpenDialog(true);
+            }}
+          >
+            <DeleteIcon fontSize="inherit" />
+          </IconButton>
+        </Stack>
+      ),
+    },
+  ];
 
-  const showExampleDlg = () => {
+  const handleDeleteConfirm = () => {
+    dispatch(stockActions.deleteProduct(String(selectedProduct!.id!)));
+    dispatch(stockActions.loadStock());
+    setOpenDialog(false);
+  };
+
+  const showDialog = () => {
+    if (selectedProduct === null) {
+      return "";
+    }
+
     return (
       <Dialog
-        open={open}
-        onClose={handleClose}
-        aria-labelledby="alert-dialog-title"
-        aria-describedby="alert-dialog-description"
+        open={openDialog}
+        keepMounted
+        aria-labelledby="alert-dialog-slide-title"
+        aria-describedby="alert-dialog-slide-description"
       >
-        <DialogTitle id="alert-dialog-title">
-          {"Use Google's location service?"}
+        <DialogTitle id="alert-dialog-slide-title">
+          <img
+            src={`${imageUrl}/images/${
+              selectedProduct.image
+            }?dummy=${Math.random()}`}
+            style={{ width: 100, borderRadius: "5%" }}
+          />
+          <br />
+          Confirm to delete the product? : {selectedProduct.name}
         </DialogTitle>
         <DialogContent>
-          <DialogContentText id="alert-dialog-description">
-            Let Google help apps determine location. This means sending
-            anonymous location data to Google, even when no apps are running.
+          <DialogContentText id="alert-dialog-slide-description">
+            You cannot restore deleted product.
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose}>Disagree</Button>
-          <Button onClick={handleClose} autoFocus>
-            Agree
+          <Button onClick={() => setOpenDialog(false)} color="info">
+            Cancel
+          </Button>
+          <Button onClick={handleDeleteConfirm} color="primary">
+            Delete
           </Button>
         </DialogActions>
       </Dialog>
@@ -259,11 +280,11 @@ export default function StockPage() {
         sx={{ backgroundColor: "white", height: "70vh" }}
         rows={stockReducer.result}
         columns={stockColumns}
-        pageSize={10}
+        pageSize={5}
         rowsPerPageOptions={[5]}
       />
-      <Button onClick={() => setOpen(true)}>Show Dlg</Button>
-      {showExampleDlg()}
+
+      {showDialog()}
     </Box>
   );
 }
