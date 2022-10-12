@@ -112,6 +112,7 @@ function QuickSearchToolbar(props: QuickSearchToolbarProps) {
 
 export default function StockPage() {
   const stockReducer = useSelector((state: RootReducers) => state.stockReducer);
+  console.log("sssssssssss", stockReducer);
   const dispatch = useAppDispatch();
   const [keywordSearch, setKeywordSearch] = useDebounce<string>("", 1000);
   const [keywordSearchNoDelay, setKeywordSearchNoDelay] =
